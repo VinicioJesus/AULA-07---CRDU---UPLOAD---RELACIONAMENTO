@@ -6,7 +6,7 @@
   $app = new \Slim\App();
   //Endpoint Requisiçã para listar todos os contatos
   $app->get('/contatos', function($request, $response, $args){
-    
+    $response-write('Testando a API pelo GET');
   });
   //Endpoint Requisiçã para listar contatos pelo id
   $app->get('/contatos/{id}', function($request, $response, $args){
