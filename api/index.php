@@ -26,13 +26,15 @@
   //Converte a URL requisitadaa em um array para dividir as opçoes de busca, que é separada pelo "/"
   $url = explode('/', $urlHTTP);
   
-  switch (strtoupper($url)) {
-    case 'value':
-      # code...
+  //o utl vem um array então tem que dar no indice 0
+  // verifica qual API será encaminhada a requisição (contatos, estados, etc)
+  switch (strtoupper($url[0])) {
+    case 'CONTATOS':
+      require_once('contatosAPI/index.php');
       break;
     
-    default:
-      # code...
+    case 'ESTADOS':
+      require_once('estadosAPI/index.php');
       break;
   }
 
