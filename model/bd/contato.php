@@ -125,7 +125,7 @@
         $conexao = conexaoMysql();
 
         //script para listar todos os dados do BD
-        $sql = "select * from tblcontatos order by idcontato desc";
+        $sql = "select * from tblcontatos order by id desc";
         
         //Executa o scrip sql no BD e guarda o retorno dos dados, se houver
         $result = mysqli_query($conexao, $sql);

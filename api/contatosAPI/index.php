@@ -11,14 +11,26 @@
     //import da controller de contatos, que fará a busca de dados
     require_once('../modulo/config.php');
     require_once('../controller/controllerContatos.php');
-
+    //solicita os dados para a controller
     if($dados = listarContato())
     {
+      //realiza a conversão do array de dados para json
       if ($dadosJSON = createJSON($dados))
-        {
-            $response->write($dadosJSON);
-        }
-      
+      {   
+          // Caso exista dados a serem retornados, informamos o statusCode 200 e
+          // enviamos um JSON com todos os dados encontrados
+          $response   ->withStatus(200)
+                      ->withHeader('Content-Type', 'application/json')
+                      ->write($dadosJSON);
+      }
+  
+    }else{
+
+      //retorna os statusCode que significa que a requisição foi aceita, porém 
+      //sem conteudo de retorno
+      $response   ->withStatus(204)
+                  ->withHeader('Content-Type', 'application/json')
+                  ->write('{"message":"Nenhum contato encontrado"}');
     }
     
   });
