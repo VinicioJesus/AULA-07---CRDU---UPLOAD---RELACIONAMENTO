@@ -1,5 +1,13 @@
 <?php
 
+  /*
+  * $request -> Recebe dados do corpo da requisição (JSON, FORM/DATA, XML, etc)
+  * $response -> Envia dados de retorno da API
+  * $args -> Permite receber dados de atributos na API
+  *
+  */
+
+
   //import do arquivo autoload, que fará as instancias do slim
   require_once('vendor/autoload.php'); 
   
@@ -36,7 +44,9 @@
   });
   //Endpoint Requisiçã para listar contatos pelo id
   $app->get('/contatos/{id}', function($request, $response, $args){
-
+     $id = $args['id'];
+     echo($id);
+     die;
   });
   //Endpoint Requisiçã para inserir um novo contato
   $app->post('/contatos', function($request, $response, $args){
