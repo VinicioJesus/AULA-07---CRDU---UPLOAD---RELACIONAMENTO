@@ -13,7 +13,7 @@
 
     
     
-    define('SRC', $_SERVER['DOCUMENT_ROOT'].'/vinicio/Aula07CrudRelacionamento');
+    define('SRC', $_SERVER['DOCUMENT_ROOT'].'/vinicio/Aula07CrudRelacionamento/');
     
     /***********FUNÇÕES***************/
     //função para converter array para json 
