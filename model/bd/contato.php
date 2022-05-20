@@ -149,7 +149,7 @@
                     "email"     =>  $rsDados['email'],
                     "obs"       =>  $rsDados['obs'],
                     "foto"      =>  $rsDados['foto'],
-                    "idestado"  =>  $rsDados['idestado']
+                    "idestado"  =>  $rsDados['id']
                 );
                 $cont++;
             }
@@ -198,7 +198,7 @@
                     "email"     =>  $rsDados['email'],
                     "obs"       =>  $rsDados['obs'],
                     "foto"      =>  $rsDados['foto'],
-                    "idestado"  =>  $rsDados['idestado']
+                    "idestado"  =>  $rsDados['id']
                 );
             }
         }    

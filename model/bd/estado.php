@@ -18,7 +18,7 @@
         $conexao = conexaoMysql();
 
         //script para listar todos os dados do BD
-        $sql = "select * from tblestados order by nome asc";
+        $sql = "select * from tblestado order by nome asc";
         
         //Executa o scrip sql no BD e guarda o retorno dos dados, se houver
         $result = mysqli_query($conexao, $sql);
