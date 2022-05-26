@@ -10,25 +10,26 @@
     require_once(SRC.'modulo/config.php');
 
     //Função para receber dados da View e encaminhar para a model (Inserir)
-    function inserirContato ($dadosContato, $file)
+    function inserirContato ($dadosContato)
     {
         $nomeFoto = (string) null;
         
         //Validação para verificar se o objeto esta vazio
         if(!empty($dadosContato))
         {
+            $file = $dadosContato['file'];
             //Validação de caixa vazia dos elementos nome, celular e email, 
             //pois são obrigatórios no BD
-            if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail']) && !empty($dadosContato['sltEstado']))
+            if(!empty($dadosContato[0]['nome']) && !empty($dadosContato[0]['celular']) && !empty($dadosContato[0]['email']) && !empty($dadosContato[0]['estado']))
                 {
                     //Validação para identificar se chegou um arquivo para upload
-                    if ($file['fleFoto']['name'] != null)
+                    if ($file['foto']['name'] != null)
                     {
                         //import da função de upload
-                        require_once('modulo/upload.php');
+                        require_once(SRC.'modulo/upload.php');
                         
                         //Chama a função de upload
-                        $nomeFoto = uploadFile($file['fleFoto']);
+                        $nomeFoto = uploadFile($file['foto']);
 
                         if(is_array($nomeFoto))
                         {
@@ -48,17 +49,17 @@
                     //OBS: criar as chaves do array conforme os nomes dos atributos
                         //do BD
                     $arrayDados = array (
-                        "nome"      => $dadosContato['txtNome'],
-                        "telefone"  => $dadosContato['txtTelefone'],
-                        "celular"   => $dadosContato['txtCelular'],
-                        "email"     => $dadosContato['txtEmail'],
-                        "obs"       => $dadosContato['txtObs'],
+                        "nome"      => $dadosContato[0]['nome'],
+                        "telefone"  => $dadosContato[0]['celefone'],
+                        "celular"   => $dadosContato[0]['celular'],
+                        "email"     => $dadosContato[0]['email'],
+                        "obs"       => $dadosContato[0]['obs'],
                         "foto"      => $nomeFoto,
-                        "idEstado"  => $dadosContato['sltEstado']
+                        "idEstado"  => $dadosContato[0]['estado']
                     );
 
                     //import do arquivo de modelagem para manipular o BD
-                    require_once('model/bd/contato.php');
+                    require_once(SRC.'model/bd/contato.php');
                     //Chama a função que fará o insert no BD (esta função esta na model)
                     if(insertContato($arrayDados))
                         return true;
@@ -171,7 +172,7 @@
         if($id != 0 && !empty($id) && is_numeric($id))
         {
             //import do arquivo de contato
-            require_once('model/bd/contato.php');
+            require_once(SRC.'model/bd/contato.php');
             
             //import do arquivo de configurações do projeto
             require_once('modulo/config.php');
@@ -184,7 +185,7 @@
                 {
                     //unlink() - função para apagar um arquivo de um diretório
                     //Permite apagar a foto fisicamente do diretório no servidor
-                    if(unlink(DIRETORIO_FILE_UPLOAD.$foto))
+                    if(unlink(SRC.DIRETORIO_FILE_UPLOAD.$foto))
                         return true;
                     else
                         return array('idErro'   => 5,
@@ -229,7 +230,7 @@
          if($id != 0 && !empty($id) && is_numeric($id))
          {
              //import do arquivo de contato
-            require_once('model/bd/contato.php');
+            require_once(SRC.'model/bd/contato.php');
 
             //Chama a função na model que vai buscar no BD
             $dados = selectByIdContato($id);
