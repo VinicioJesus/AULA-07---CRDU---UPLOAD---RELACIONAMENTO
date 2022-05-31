@@ -5,6 +5,14 @@
   * $response -> Envia dados de retorno da API
   * $args -> Permite receber dados de atributos na API
   *
+  * Os metodos de reposição para uma API RESTful são:
+  * GET       - para buscar dados
+  * POST      - para iserir um novo dado
+  * DELETE    - para apagar dados
+  * PUT/PATCH - para editar um dado já existente
+  *             o mais utilizado é o PUT
+  *
+  * 
   */
 
 
@@ -159,17 +167,100 @@
     }
 
   });
-  //Executa todos os Endpoint
-  $app->run();
-  
 
+  //Endpoint Requisição para atualizar um contato, simulando o PUT
+  $app->post('/contatos/{id}', function($request, $response, $args){
+    
+    //Recebe do header da requisição qual será o content type
+    $contentTypeHeader = $request->getHeaderLine('Content-Type');
+    //Cria um array ois dependendo do content-type temos mais informações separadas
+    $contentType = explode(';', $contentTypeHeader);
+
+    if(is_numeric($args['id']))
+    {
+      
+      
+      //Recebe o id enviado no Endpoint atraves da vareavel ID
+      $id = $args['id'];
+      
+    
+      echo ($contentTypeHeader);
+    
+
+      switch ($contentType[0]) {
+        case 'multipart/form-data':
+           //import da controller de contatos, que fará a busca de dados
+           require_once('../modulo/config.php');
+           require_once('../controller/controllerContatos.php');
+
+          //chama a função para buscar a foto que ja está salva no banco de dados
+          if($dadosContato = buscarContato($id))
+          {
+
+            $fotoAtual = $dadosContato['foto'];          
+
+            //Recebe os dados enviado pelo corpo da requisição
+            $dadosBody = $request->getParsedBody();
+
+            //Recebe uma imagem enviada pelo corpo da requisição
+            $uploadFiles = $request->getUploadedFiles();
+            //Cria um array com toos os dados que chegaram pela requisição, devido aos dados serem protegidos
+            //criamos um array e recuperamos os dados pelos metodos do objeto
+            $arrayFoto = array( "name"     => $uploadFiles['foto']->getClientFileName(),
+                                "type"     => $uploadFiles['foto']->getClientMediaType(),                          
+                                "size"     => $uploadFiles['foto']->getSize(),
+                                "tmp_name" => $uploadFiles['foto']->file
+                                
+                              
+            );
+            //Cria uma chave chamada  "foto" para coloca todos os dados do objeto, conforme é gerado em form
+            $file = array("foto" => $arrayFoto);
+            //Cria um array com toods os dados couns e do do arquivo que será enviado para o servidor
+            $arrayDados = array( $dadosBody, 
+                                "file" => $file,
+                                "id" => $id,
+                                "fotoAtual" => $fotoAtual
+                              
+            );
+           
+            
+            $resposta = atualizarContato($arrayDados);
+
+            if (is_bool($resposta) && $resposta == true) {
+
+              return $response   ->withStatus(200)
+                                  ->withHeader('Content-Type', 'application/json')
+                                  ->write('{"message":"Contato atualizado com sucesso"}');
+
+            } elseif (is_array($resposta) && $resposta['idErro'])        
+            {
+              $dadosJSON = createJSON($resposta);
+
+              return $response   ->withStatus(400)
+                                  ->withHeader('Content-Type', 'application/json')
+                                  ->write('{"message":"Erro ao atualizar contato."},
+                                  "Erro": '.$dadosJSON.' }');
+            }
+            break;      
+          case 'application/json':
+          
+        } 
+      }
+    }else
+    {
+      //retorna um erro que significa que o cliente passou os dados errados
+      return  $response   ->withStatus(404)
+                          ->withHeader('Content-Type', 'application/json')
+                          ->write('{"message" : "É obrigatorio informar um ID com formato valido (número)"}');
+    }
+  });
+  
   //Endpoit: Requisição para deletar um contato
   $app->delete('/contatos/{id}', function($request, $response, $args){
 
     if(is_numeric($args['id']))
     {
-      require_once('../modulo/config.php');
-      require_once('../Controller/controllerContatos.php');
+      
 
       //Recebe o id enviado no Endpoint atraves da vareavel ID
       $id = $args['id'];
@@ -226,6 +317,11 @@
     
 
   });
+
+  //Executa todos os Endpoint
+  $app->run();
+  
+
 
 
 ?>

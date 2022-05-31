@@ -35,7 +35,7 @@
             {
                 //Cria um array com os dados do BD
                 $arrayDados[$cont] = array (
-                    "idestado"  =>  $rsDados['id'],
+                    "idestado"  =>  $rsDados['idestado'],
                     "nome"      =>  $rsDados['nome'],
                     "sigla"     =>  $rsDados['sigla'],
                 );

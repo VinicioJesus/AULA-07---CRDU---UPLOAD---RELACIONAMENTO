@@ -35,7 +35,7 @@
                     '".$dadosContato['email']."', 
                     '".$dadosContato['obs']."',
                     '".$dadosContato['foto']."',
-                    '".$dadosContato['idEstado']."'
+                    '".$dadosContato['idestado']."'
                 );";
 
        
@@ -73,7 +73,7 @@
                         obs         = '".$dadosContato['obs']."',
                         foto        = '".$dadosContato['foto']."',
                         idestado    = '".$dadosContato['idestado']."'
-                where idcontato =".$dadosContato['id'];
+                where idcontato =".$dadosContato['idcontato'];
 
        
         //Executa o scriipt no BD
@@ -125,7 +125,7 @@
         $conexao = conexaoMysql();
 
         //script para listar todos os dados do BD
-        $sql = "select * from tblcontatos order by id desc";
+        $sql = "select * from tblcontatos order by idcontato desc";
         
         //Executa o scrip sql no BD e guarda o retorno dos dados, se houver
         $result = mysqli_query($conexao, $sql);
